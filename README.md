@@ -16,7 +16,8 @@ Data folder contain two sub folders:
 1. Raw: data in the way it was collected from the projects description
 - 02_Verra-registry_2024-01-03
 
-2. Processed:data in a table format suitable for statistical analysis
+
+2. Processed: data in a table format suitable for statistical analysis
 - Projects_info_V06.csv: table with all information useful for statistical analyses were maintained here and cleaned. This is the file ran in the scripts 
 - Projects_info.csv: table with all information useful for statistical analyses but without a basic cleaning
 - Projects_info.xlsx: table with all information useful for statistical analyses but without a basic cleaning in the xlsx format
