@@ -1,4 +1,4 @@
-#**Beyond Carbon: how biodiversity is considered in carbon market restoration projects**
+# **Beyond Carbon: how biodiversity is considered in carbon market restoration projects**
 
 This repository contains all data, R scripts, and outputs from the statistical analyses used to investigate the role of biodiversity in environmental restoration projects submitted to one of the largest carbon certification systems: the Verified Carbon Standard (VCS) Program by the Verra organization.
 
@@ -6,11 +6,11 @@ I assessed whether biodiversity has been considered during restoration planning,
 
 This is the first chapter of my doctoral thesis developed in the Graduate Program in Ecology and Evolution.
 
-#**Repository structure**
+# **Repository structure**
 
 All type of material is organized in individual folders properly named and described bellow:
 
-##**Data folder**
+## **Data folder**
 Data folder contain two sub folders:
 
 1. Raw: data in the way it was collected from the projects description
@@ -22,7 +22,7 @@ Data folder contain two sub folders:
 - Projects_info.xlsx: table with all information useful for statistical analyses but without a basic cleaning in the xlsx format
 - Species_name_original_data.xlsx: table obtained thought script 05 analyses aiming that each line correspond to only one planted species, allowing further standardization of planted species name.  
 
-##**R folder**
+## **R folder**
 
 The R folder contains all scripts made in R Studio software 4.3.2.
 
@@ -35,7 +35,7 @@ The scripts are numbered in the best order to running, since there are dependenc
 - 05_Analyzes_planted-species.R: standardization, correction, and summary of planted species names.
 - 06_Analyzes_biodiversity-metrics.R:standardization, correction, and summary of planted species names. 
 
-##**Outputs folder**
+## **Outputs folder**
 
 This folder contains tables and figures resulting from statistical analyses or summary procedures.
 
