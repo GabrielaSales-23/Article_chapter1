@@ -46,24 +46,24 @@ library(viridis)
 library(ggpattern)
 library(scales)
 
-# Transformar o 'mapdata' em um objeto 'sf' para cálculo do centroide
+# Transforming 'mapdata' in an 'sf' object to calculate the centroid
 centroides <- st_as_sf(mapdata, coords = c("long", "lat"), crs = 4326, agr = "constant")
 
-# Extrair as coordenadas dos centroides (longitude e latitude)
+# Extract centroids coords (Extrair as coordenadas dos centroides (longitude e latitude))long and lat)
 centroid_coords <- st_coordinates(centroides)
 
-# Adicionar as coordenadas do centroide ao 'mapdata'
+# Adding centroids coords to the map
 mapdata <- mapdata %>%
   mutate(centroid_lon = centroid_coords[, 1],  # Longitude do centroide
          centroid_lat = centroid_coords[, 2])  # Latitude do centroide
 
-# Classificação das zonas climáticas com base na latitude do centroide
+# Classifying climate zone based on centroids latitude
 mapdata <- mapdata %>%
   mutate(climate_zone = case_when(
-    centroid_lat >= -23.5 & centroid_lat <= 23.5 ~ "tropical",  # Zona tropical
-    (centroid_lat > 23.5 & centroid_lat <= 40) | (centroid_lat < -23.5 & centroid_lat >= -40) ~ "subtropical",  # Zona subtropical
-    (centroid_lat > 40 & centroid_lat <= 60) | (centroid_lat < -40 & centroid_lat >= -60) ~ "temperate",  # Zona temperada
-    TRUE ~ "cold"  # Zona fria
+    centroid_lat >= -23.5 & centroid_lat <= 23.5 ~ "tropical",  # tropical zone
+    (centroid_lat > 23.5 & centroid_lat <= 40) | (centroid_lat < -23.5 & centroid_lat >= -40) ~ "subtropical",  # subtropical zone
+    (centroid_lat > 40 & centroid_lat <= 60) | (centroid_lat < -40 & centroid_lat >= -60) ~ "temperate",  # temperate zone
+    TRUE ~ "cold"  # cold zone
   ))
 names(mapdata)
 View(mapdata)

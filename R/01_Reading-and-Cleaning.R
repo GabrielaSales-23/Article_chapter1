@@ -9,14 +9,14 @@ View(data)
 library(dplyr)
 head(data)
 
-df <- data %>% filter(Filter.suitability.=="Yes")  
+df <- data %>% filter(Filter.suitability.=="Yes")
 head(df)
 nrow(df)  #114 projects fit the criteria
 
 df <- df %>% select(-Carimbo.de.data.hora, -Endereço.de.e.mail, -If.no..why., -Filter.suitability.)
 colnames(df)
 
-# Verification of false double levels
+# Verifying false double levels
 
 df$Country <- as.factor(df$Country)
 levels(df$Country)
@@ -50,17 +50,17 @@ df <- df %>%
 df <- df %>%
   mutate(Climate = if_else(str_detect(Climate, "(?i)Tropical "), "Tropical", Climate))
 
-# 
+#
 # rows_with_x <- which(df$Climate == "Tropical and Subtropical Grasslands, Savannas and Shrublands")
 # df[72,]
 # df <- df %>%
 #   mutate(Climate = if_else(str_detect(Climate, "(?i)Tropical and Subtropical Grasslands, Savannas and Shrublands"), "Tropical", Climate))
 
-df <- df %>% 
+df <- df %>%
   mutate(Funding = if_else(str_detect(Funding, "(?i)Carbon credits under VCS, Carbon credits under CCB"), "VCS and CCB", Funding))
-df <- df %>% 
+df <- df %>%
   mutate(Funding = if_else(str_detect(Funding, "(?i)Carbon credits under VCS"), "VCS",  Funding))
-df <- df %>% 
+df <- df %>%
   mutate(Funding = if_else(str_detect(Funding, "(?i)Carbon credits under CCB"), "VCS and CCB",  Funding))
 df <- df %>%
     mutate(across(c(Country, Continent, Biome, Climate, Land_owner, Biomass, Year, Profit_owner, Funding, Plant_origin, Social_actions, Biodiversity_actions, Biodiversity_variables, Success_by_biod, Biodiversity_monitoring, Post_land_use, Restoration_type), as.factor))
