@@ -5,7 +5,7 @@ View(df)
 
 ## Carbon removing vs Area
 
-df$Area <- trimws(df$Area) # removing spaces 
+df$Area <- trimws(df$Area) # removing spaces
 df$Carbon <- trimws(df$Carbon)
 df_C <- df %>% filter(Area != "Uninformed")
 df_C <- df_C %>% filter(Area != ">50.000")
@@ -82,10 +82,10 @@ combinacoes <- combn(names(df_C_qual)[qualitativas], 2, simplify = FALSE)
 resultados_todos <- lapply(combinacoes, function(par) {
   tabela <- table(df_C_qual[[par[1]]], df_C[[par[2]]])
   teste <- chisq.test(tabela)
-  
+
   # Retornar os resultados (incluindo todos os testes)
-  return(data.frame(Variavel1 = par[1], 
-                    Variavel2 = par[2], 
+  return(data.frame(Variavel1 = par[1],
+                    Variavel2 = par[2],
                     X_squared = round(teste$statistic, 3),  # Valor do chi-quadrado
                     P_value = round(teste$p.value, 3)))    # Valor p
 })
@@ -171,139 +171,8 @@ save
 # library(MuMIn)
 # modelos <- dredge(global_m)
 # modelos
-# 
-# library(lme4)
-# m1 <- lm(carbon_log~area_log+Duration_log, data = df_C)
-# anova(m1)
-# summary(m1)
-# sum(resid(m1)^2)
-# plot(m1)
-# AIC(m1)
-# plot(carbon_log~area_log, data = df_C, xlab = "Area", ylab = "Carbon removal")
-# abline(lm(carbon_log~area_log, data = df_C))
-# 
-# m2 <- glm(carbon_log~area_log+Duration_log, data = df_C, family = Gamma)
-# summary(m2)
-# sum(resid(m2)^2)
-# plot(m2)
-# AIC(m2)
-# 
-# #### result: relation with area more than duration
-# 
-# #### Positive effect of area on carbon removal
-# df_C$Carbon.area <- log(df_C$Carbon/df_C$Area)
-# View(df_C)
-# hist(df_C$Carbon.area)
-# plot(df_C$Carbon.area)
-# 
-# ggplot(df_C, aes(x = seq_along(Carbon.area), y = Carbon.area, size = Area, )) +
-#   geom_point(col = "red") +
-#   labs(x = "Índice", y = "Carbon/area") +
-#   theme_minimal()
-# ggsave("Figures/Carbon_area_efficience.png",height = 12,width = 8, units = "in",dpi = 300)
-# 
-# hist(df_C$Carbon.area)
-# 
-# ggplot(df_C, aes(x = area_log, y = carbon_log, size = Duration)) +
-#   geom_point(col = "green") +
-#   labs(x = "Area", y = "Tonnes") +
-#   theme_minimal()
-# ggsave("Figures/Carbon_area__durationefficience.png",height = 12,width = 8, units = "in",dpi = 300)
-# 
-# hist(df_C$Carbon.area)
-
-
-
-# 
-# ## Carbon removing vs crediting system
-# par(mfrow = c(1,1))
-# boxplot(df_C$Carbon.area ~ df_C$Funding)
-# t.test(df_C$Carbon.area ~ df_C$Funding)  
-# 
-# 
-# ggplot(df_C, aes(x = seq_along(Carbon.area), y = Carbon.area, color = Funding)) +
-#   geom_point() +
-#   labs(x = "Índice", y = "Carbon/area",
-#        color = "Credit system") +
-#   theme_minimal()
-# 
-# ## Carbon removing vs social and biodiversity actions
-# boxplot(df_C$Carbon.area ~ df_C$Social_actions)
-# t.test(df_C$Carbon.area ~ df_C$Social_actions)  
-# boxplot(df_C$Carbon.area ~ df_C$Biodiversity_actions)
-# t.test(df_C$Carbon.area ~ df_C$Biodiversity_actions)  
-# 
-# # no difference 
-# 
-# ## Carbon removing vs Exotic and native plant use
-# df_C$Plant_origin
-# boxplot(df_C$Carbon.area ~ df_C$Plant_origin) # removal
-# summary(aov(df_C$Carbon.area ~ df_C$Plant_origin)) # no difference in carbon removal mean between native and exotic plants use
-# 
-# ##Carbon removing vs number of species used
-# library(tidyr)
-# sp_df_C <- df_C %>%
-#   separate_rows(Species_name, sep = ",\\s*") ## putting each specie in one line
-# View(sp_df_C)
-# Species_number <- sp_df_C %>% count(ID)
-# View(Species_number)
-# names(Species_number)[2] <- "species_number"
-# df_C <- left_join(df_C, Species_number, by="ID")
-# View(df_C)
-# df_C$species_number_log <- log(df_C$species_number)
-# plot(Carbon.area~species_number_log, data=df_C)
-# m3 <- lm(Carbon.area~species_number_log, data=df_C)
-# summary(m3)
-# ### no effect, but I don't know if it is a good variable to use, since some projects does not inform the exactly the species used, they inform the group of specie that could be used by each farmer.
-# 
-# ## Carbon removing vs biomass origin 
-# boxplot(df_C$Carbon.area ~ df_C$Biomass) # apparently no effect
-# summary(aov(df_C$Carbon.area ~ df_C$Biomass))
-# rows_with_x <- which(df_C$Biomass == "Above ground, Soil biomass")
-# #the results of effect are driven by project in line 51, that is one with the greatest carbon removal
-# 
-# ## Carbon removing vs type of restoration
-# df_C$Restoration_type_resume <- df_C$Restoration_type
-# View(df_C)
-# df_C <- df_C %>%
-#   mutate(Restoration_type_resume = if_else(str_detect(Restoration_type_resume, "(?i)Commercial"), "Commercial reforestation", Restoration_type_resume))
-# boxplot(df_C$Carbon.area ~ df_C$Restoration_type_resume,
-#         xlab = "",
-#         ylab = "Carbon Log",
-#         las = 2)
-# 
-# ggplot(df_C, aes(x = Restoration_type_resume, y = Carbon.area)) +
-#   geom_boxplot() +
-#   xlab("Restoration Type") +
-#   ylab("Carbon removal by hectare (log)") +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-# summary(aov(df_C$Carbon.area ~ df_C$Restoration_type_resume))
-# 
-# ## Carbon removing vs Biome 
-# boxplot(df_C$Carbon.area ~ df_C$Biome)
-# summary(aov(df_C$Carbon.area ~ df_C$Biome))
-# 
-# ## Carbon removing vs Climate 
-# boxplot(df_C$Carbon.area ~ df_C$Climate)
-# summary(aov(df_C$Carbon.area ~ df_C$Climate))
-# 
-# ## Carbon removing vs Land owner
-# boxplot(df_C$Carbon.area ~ df_C$Land_owner)
-# summary(aov(df_C$Carbon.area ~ df_C$Land_owner))
-# 
-# ## Carbon removing vs profit owner
-# boxplot(df_C$Carbon.area ~ df_C$Profit_owner)
-# summary(aov(df_C$Carbon.area ~ df_C$Profit_owner))
-# Profit_owner <- df_C %>% count(df_C$Profit_owner)
-# View(Profit_owner)
-# 
-# ## Carbon removing vs post land use
-# boxplot(df_C$Carbon.area ~ df_C$Post_land_use)
-# summary(aov(df_C$Carbon.area ~ df_C$Post_land_use))
-# 
-# ## Carbon removing vs monitoring plan
-# boxplot(df_C$Carbon.area ~ df_C$Biodiversity_monitoring)
-# t.test(df_C$Carbon.area ~ df_C$Biodiversity_monitoring)
+#
+# #### result: weakest model
 
 
 
@@ -311,7 +180,7 @@ save
 
 
 ## Native and Exotic plants vs crediting system
-#contingency table 
+#contingency table
 count_data_po <- table(df_C$Plant_origin, df_C$Funding)
 count_df_po <- as.data.frame(count_data_po)
 colnames(count_df_po) <- c("Plant", "Creditsystem", "n")
@@ -320,49 +189,10 @@ View(count_df_po)
 #Testing
 fisher.test(df_C$Plant_origin, df_C$Funding)
 
-# #Ploting
-# ggplot(count_df_po, aes(x = Creditsystem, y = n, fill = Plant)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = "Credit system", y = "Number of projects",
-#        fill = "Species origin") +
-#   scale_fill_viridis_d() +
-#   theme_minimal()+
-#   theme(
-#     axis.title.x = element_text(size = 20, face = "bold"),
-#     axis.title.y = element_text(size = 20, face = "bold"),
-#     axis.text.x = element_text(size = 14),
-#     axis.text.y = element_text(size = 14),
-#     legend.text = element_text(size = 14),
-#     legend.title = element_text(size = 16),
-#     panel.grid.major = element_blank(), 
-#     panel.grid.minor = element_blank()
-# )
-# 
-# #horizontal
-# ggplot(count_df_po, aes(x = n, y = Creditsystem, fill = Plant)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = "Number of projects", y = "Credit system",
-#        fill = "Species origin") +
-#   scale_fill_viridis_d() +
-#   theme_minimal()+
-#   theme(
-#     axis.title.x = element_text(size = 20, face = "bold"),
-#     axis.title.y = element_text(size = 20, face = "bold"),
-#     axis.text.x = element_text(size = 14),
-#     axis.text.y = element_text(size = 14),
-#     legend.text = element_text(size = 14),
-#     legend.title = element_text(size = 16),
-#     panel.grid.major = element_blank(), 
-#     panel.grid.minor = element_blank(),
-#     legend.position = c(0.75,0.8)
-#   )
-# 
-# ggsave("Outputs/Figures/exploration/Native_Exotic_Credit_System.png",height = 12,width = 8, units = "in",dpi = 300)
-
 # The proportion of CCB projects using only native species is greater than VCS projects
 
 ##Biomass
-#contingency table 
+#contingency table
 count_data_bm <- table(df_C$Biomass, df_C$Funding)
 count_df_bm <- as.data.frame(count_data_bm)
 colnames(count_df_bm) <- c("Biomass", "Creditsystem", "n")
@@ -371,50 +201,12 @@ View(count_df_bm)
 #Testing
 fisher.test(df_C$Biomass, df_C$Funding)
 
-# #Ploting
-# ggplot(count_df_bm, aes(x = Creditsystem, y = n, fill = Biomass)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = "Credit system", y = "Number of projects",
-#        fill = "Biomass") +
-#   scale_fill_viridis_d() +
-#   theme_minimal()+
-#   theme(
-#     axis.title.x = element_text(size = 16, face = "bold"),
-#     axis.title.y = element_text(size = 16, face = "bold"),
-#     axis.text.x = element_text(size = 14),
-#     axis.text.y = element_text(size = 14),
-#     legend.text = element_text(size = 14),
-#     legend.title = element_text(size = 16),
-#     panel.grid.major = element_blank(), 
-#     panel.grid.minor = element_blank()
-#   )
-# 
-# #horizontal
-# ggplot(count_df_bm, aes(x = n, y = Creditsystem, fill = Biomass)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = "Number of projects", y = "Credit system",
-#        fill = "Biomass") +
-#   scale_fill_viridis_d() +
-#   theme_minimal()+
-#   theme(
-#     axis.title.x = element_text(size = 20, face = "bold"),
-#     axis.title.y = element_text(size = 20, face = "bold"),
-#     axis.text.x = element_text(size = 14),
-#     axis.text.y = element_text(size = 14),
-#     legend.text = element_text(size = 14),
-#     legend.title = element_text(size = 16),
-#     panel.grid.major = element_blank(), 
-#     panel.grid.minor = element_blank(),
-#     legend.position = c(0.75,0.8)
-#   )
-# ggsave("Outputs/Figures/exploration/Fig4.Biomass_Credit_System.png",height = 12,width = 8, units = "in",dpi = 300)
-
 ## joings the graphics 3 and 4
 library(ggplot2)
 library(viridis)
 library(patchwork)
 
-# Primeiro gráfico
+# First graphic
 cores1 <- c("#440154FF","#482677FF","#287D8EFF")
 plot1 <- ggplot(count_df_po, aes(x = n, y = Creditsystem, fill = Plant)) +
   geom_bar(stat = "identity") +
@@ -434,7 +226,7 @@ plot1 <- ggplot(count_df_po, aes(x = n, y = Creditsystem, fill = Plant)) +
   )
 
 
-# Segundo gráfico
+# Second graphic
 library(viridis)
 cores2 <- tail(viridis(14),5)
 plot2 <- ggplot(count_df_bm, aes(x = n, y = Creditsystem, fill = Biomass)) +
@@ -455,8 +247,8 @@ plot2 <- ggplot(count_df_bm, aes(x = n, y = Creditsystem, fill = Biomass)) +
     legend.position = c(0.7, 0.8)
   )
 
-# Combinar os gráficos lado a lado
-combined_plots <- plot1 + plot2 + 
+# Combining graphics side by side
+combined_plots <- plot1 + plot2 +
   plot_layout(nrow = 2, axis_titles = 'collect') +
   plot_annotation(tag_levels = "a") &
   theme(
@@ -497,8 +289,8 @@ ggsave("Outputs/Figures/Area_Credit_System.png",height = 10,width = 12, units = 
 ##Number of plant species used vs Credit system
 hist(log(df_C$species_number.x))
 boxplot(df_C$species_number.x~df_C$Funding)
-t.test(df_C$species_number.x~df_C$Funding) 
-#no big difference. 
+t.test(df_C$species_number.x~df_C$Funding)
+#no big difference.
 
 library(plotly)
 data_summary <- df_C %>%
@@ -512,50 +304,3 @@ ggplot(data_summary, aes(x = Plant_origin, y = Funding, fill = carbon_log_mean))
   labs(title = "Distribuição de Projetos por Biomass, Funding e Plant Origin",
        x = "Plant origin",
        y = "Funding")
-
-
-# ## Graphic summary of results 
-# library(patchwork)
-# 
-# # Criar os gráficos ggplot2
-# p1 <- ggplot(count_df_po, aes(x = Creditsystem, y = n, fill = Plant)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = " ", y = "Number of projects",
-#        fill = "Species origin") +
-#   scale_fill_viridis_d() +
-#   theme_classic() +
-#   theme(axis.text.x = element_blank(),
-#         legend.position = c(0.63, 0.8),
-#         legend.text = element_text(size = 10),
-#         legend.title = element_text(size = 12),
-#         legend.key.size = unit(0.5, "cm")
-#   )+
-#   ggtitle("a")
-# 
-# p2 <- ggplot(count_df_bm, aes(x = Creditsystem, y = n, fill = Biomass)) +
-#   geom_bar(stat = "identity") +
-#   labs(x = " ", y = "Number of projects",
-#        fill = "Biomass") +
-#   scale_fill_viridis_d() +
-#   theme_classic()+
-#   theme(axis.text.x = element_blank(),
-#         legend.position = c(0.77, 0.8),  # Ajuste da posição da legenda
-#         legend.text = element_text(size = 10),
-#         legend.title = element_text(size = 12),
-#         legend.key.size = unit(0.5, "cm")
-#         )+
-#   ggtitle("b")
-# 
-# p3 <- ggplot(df_C, aes(x = Funding, y = area_log)) +
-#   geom_boxplot() +
-#   labs(x = "Credit system", y = "Area (log)") +
-#   theme_classic() +
-#   ggtitle("c")
-# 
-# # Combinar os gráficos com patchwork
-# combined <- p1 / p2 / p3
-# combined
-# ggsave("combined_plot.png", combined, width = 7, height = 12)
-# 
-# 
-# 
